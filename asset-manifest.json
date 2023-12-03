@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/life-quality/static/css/main.f855e6bc.css",
+    "main.js": "/life-quality/static/js/main.14b5a7a4.js",
+    "static/js/787.f8be5fda.chunk.js": "/life-quality/static/js/787.f8be5fda.chunk.js",
+    "static/media/logo.svg": "/life-quality/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/life-quality/index.html",
+    "main.f855e6bc.css.map": "/life-quality/static/css/main.f855e6bc.css.map",
+    "main.14b5a7a4.js.map": "/life-quality/static/js/main.14b5a7a4.js.map",
+    "787.f8be5fda.chunk.js.map": "/life-quality/static/js/787.f8be5fda.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f855e6bc.css",
+    "static/js/main.14b5a7a4.js"
+  ]
+}
