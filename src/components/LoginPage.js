@@ -7,6 +7,7 @@ import loginImage from '../images/login.svg';
 export default function LoginPage() {
     return (
         <div className="container">
+            <br />
             <div className="row">
                 <div className="col-md-6">
                     <h3>Якість життя</h3>
