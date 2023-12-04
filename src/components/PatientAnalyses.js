@@ -15,7 +15,7 @@ function PatientAnalyses() {
     useEffect(() => {
         const fetchAnalyses = async () => {
             try {
-                const response = await axios.get(`https://localhost:44375/Analysis?UserId=${id}&AnalysisType=1&SortByDateDescending=true`);
+                const response = await axios.get(`https://localhost:44375/Analysis?UserId=${id}&AnalysisType=0&SortByDateDescending=true`);
                 setAnalyses(response.data);
             } catch (error) {
                 console.error('Error fetching analyses:', error);

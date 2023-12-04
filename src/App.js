@@ -10,9 +10,9 @@ function App() {
     <>
       <Layout>
         <Routes>
-          <Route path="/mainPageDoctor" element={<MainPageDoctor />} />
+          <Route path="/mainPageDoctor/:id" element={<MainPageDoctor />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/patients" element={<PatientsTable />} />
+          <Route path="/patients/:id" element={<PatientsTable />} />
           <Route path="/patient/:id/analyses" element={<PatientAnalyses />} />
         </Routes>
       </Layout>
