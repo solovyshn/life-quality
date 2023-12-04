@@ -1,0 +1,13 @@
+.custom-btn {
+    background-color: #079BBB;
+    color: #ffffff;
+    /* Білий колір тексту */
+    border: none;
+    padding: 0.5rem 1.5rem;
+    /* Додано властивість padding для збільшення розміру кнопки */
+}
+
+.custom-btn:hover {
+    background-color: #057799;
+    /* Колір при наведенні миші */
+}

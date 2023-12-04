@@ -1,0 +1,21 @@
+body {
+    /* For the entire body background */
+    background: linear-gradient(to right, rgb(147, 228, 246), #ffffff);
+}
+
+/* Layout.css */
+
+.container {
+    margin-top: auto;
+    /* Відступ зверху */
+    margin-bottom: auto;
+    /* Відступ знизу */
+    margin-left: auto;
+    /* Автоматичний відступ зліва */
+    margin-right: auto;
+    /* Автоматичний відступ справа */
+    padding: 20px;
+    /* Внутрішній відступ для контенту в середині контейнера */
+
+    /* Додайте інші стилі, які вам потрібні для вигляду та вирівнювання */
+}
