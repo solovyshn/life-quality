@@ -51,8 +51,8 @@ body {
 
 .group-main {
     align-self: center;
-    height: 76px;
-    width: 76px;
+    height: 50px;
+    width: 50px;
     cursor: pointer;
     filter: invert(100%) sepia(0%) saturate(7476%) hue-rotate(44deg) brightness(108%) contrast(98%);
 }

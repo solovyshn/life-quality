@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import UserContext from '../userContext';
+import { useContext } from 'react';
+import {Link} from "react-router-dom";
+
 
 const analysisTypes = {
     1: 'Аналіз крові',
@@ -8,14 +11,15 @@ const analysisTypes = {
     3: 'Аналіз калу',
 };
 
-function PatientAnalyses() {
-    const { id } = useParams();
+function PatientOwnAnalyses() {
+    const { userID } = useContext(UserContext);
+
     const [analyses, setAnalyses] = useState([]);
 
     useEffect(() => {
         const fetchAnalyses = async () => {
             try {
-                const response = await axios.get(`https://localhost:44375/Analysis?UserId=${id}&AnalysisType=0&SortByDateDescending=true`);
+                const response = await axios.get(`https://localhost:44375/Analysis?UserId=${userID}&AnalysisType=0&SortByDateDescending=true`);
                 setAnalyses(response.data);
             } catch (error) {
                 console.error('Error fetching analyses:', error);
@@ -23,17 +27,25 @@ function PatientAnalyses() {
         };
 
         fetchAnalyses();
-    }, [id]);
+    }, [userID]);
 
-    const handleAnalysisSelect = (selectedAnalysisId) => {
-        // Handle radio button selection here
-        // You can use selectedAnalysisId to perform any actions based on the selected analysis
-    };
+    const formatDate = (analysisDate) =>{
+        const dateObject = new Date(analysisDate);
+
+        // Format the Date object
+        const formattedDate = new Intl.DateTimeFormat('en-GB', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+        }).format(dateObject);
+         
+        return formattedDate;
+    }
 
     return (
         <div>
             <br />
-            <h2>Аналізи</h2>
+            <h2>Ваші аналізи</h2>
             <hr />
             {analyses.length > 0 ? (
                 <table className="table bg-white">
@@ -50,24 +62,17 @@ function PatientAnalyses() {
                             <tr key={analysis.id}>
                                 <td>{analysis.laboratoryName}</td>
                                 <td>{analysisTypes[analysis.analysisType]}</td>
-                                <td>{analysis.analysisDate}</td>
-                                <td>
-                                    <input
-                                        type="radio"
-                                        name="selectedAnalysis"
-                                        value={analysis.id}
-                                        onChange={() => handleAnalysisSelect(analysis.id)}
-                                    />
-                                </td>
+                                <td>{formatDate(analysis.analysisDate)}</td>
+                                <td><Link to={`/myanalyses/details/${analysis.id}`}>Деталі</Link></td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             ) : (
-                <p>У пацієнта немає аналізів.</p>
+                <p>У Вас немає аналізів.</p>
             )}
         </div>
     );
 }
 
-export default PatientAnalyses;
+export default PatientOwnAnalyses;

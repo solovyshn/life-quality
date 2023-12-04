@@ -3,15 +3,19 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import avatar from '../images/boy.png';
 import { useParams } from 'react-router-dom';
+import { useContext } from 'react'
+import UserContext from '../userContext'
+import ArrowRight from '../images/1904671-arrow-arrow-right-change-direction-next-page-right_122521.svg'
+
 
 function PatientsTable() {
     const [patients, setPatients] = useState([]);
-    const { id } = useParams();
+    const { userID } = useContext(UserContext);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`https://localhost:44375/Patient?DoctorId=${id}&SearchQuery=%40`);
+                const response = await axios.get(`https://localhost:44375/Patient?DoctorId=${userID}&SearchQuery=%40`);
                 setPatients(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -19,7 +23,7 @@ function PatientsTable() {
         };
 
         fetchData();
-    }, [id]); // Include id in the dependency array to fetch data when id changes
+    }, [userID]); // Include id in the dependency array to fetch data when id changes
 
     return (
         <div className="container mt-4">
@@ -33,6 +37,7 @@ function PatientsTable() {
                         <th>Прізвище</th>
                         <th>Електронна пошта</th>
                         <th>Номер телефону</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,7 +51,7 @@ function PatientsTable() {
                             <td>{patient.phoneNumber}</td>
                             <td>
                                 <Link to={`/patient/${patient.id}/analyses`}>
-                                    <span>стрілка</span>
+                                    <img className="arrow-right" src={ArrowRight} alt='arrow'/>
                                 </Link>
                             </td>
                         </tr>

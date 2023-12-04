@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import UserContext from '../userContext'
 import { useNavigate } from 'react-router-dom';
 
-export default function MainPagePatient() {
+export default function AnalysDetails() {
     const { userID, userType } = useContext(UserContext);
     const navigate = useNavigate();
 
@@ -16,7 +16,7 @@ export default function MainPagePatient() {
         <div>
             <h1>Patient {userID}</h1>
             <p>{userType}</p>
-            <button className="custom-btn" onClick={handleNavigation}>Список моїх аналізів</button>
+            <button className="custom-btn" onClick={handleNavigation}>Повернутись</button>
         </div>
     );
 }
