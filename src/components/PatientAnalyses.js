@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const analysisTypes = {
+    0: 'Всі аналізи',
     1: 'Аналіз крові',
     2: 'Аналіз сечі',
     3: 'Аналіз калу',
@@ -11,23 +12,44 @@ const analysisTypes = {
 function PatientAnalyses() {
     const { id } = useParams();
     const [analyses, setAnalyses] = useState([]);
+    const [selectedAnalysisType, setSelectedAnalysisType] = useState(0);
+    const [sortByDateDescending, setSortByDateDescending] = useState(true); // Added state for sorting
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchAnalyses = async () => {
             try {
-                const response = await axios.get(`https://localhost:44375/Analysis?UserId=${id}&AnalysisType=0&SortByDateDescending=true`);
+                const response = await axios.get(`https://localhost:44375/Analysis?UserId=${id}&AnalysisType=${selectedAnalysisType}&SortByDateDescending=${sortByDateDescending}`);
                 setAnalyses(response.data);
+                setError(null);
             } catch (error) {
                 console.error('Error fetching analyses:', error);
+                setAnalyses([]);
+                setError('Аналізи відсутні.');
             }
         };
 
         fetchAnalyses();
-    }, [id]);
+    }, [id, selectedAnalysisType, sortByDateDescending]);
+
+    const formatDate = (analysisDate) => {
+        const dateObject = new Date(analysisDate);
+        const formattedDate = new Intl.DateTimeFormat('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+        }).format(dateObject);
+
+        return formattedDate;
+    }
 
     const handleAnalysisSelect = (selectedAnalysisId) => {
         // Handle radio button selection here
         // You can use selectedAnalysisId to perform any actions based on the selected analysis
+    };
+
+    const handleSortByDate = () => {
+        setSortByDateDescending((prevSort) => !prevSort);
     };
 
     return (
@@ -35,13 +57,33 @@ function PatientAnalyses() {
             <br />
             <h2>Аналізи</h2>
             <hr />
-            {analyses.length > 0 ? (
+            <select
+                className="form-select"
+                value={selectedAnalysisType}
+                onChange={(e) => setSelectedAnalysisType(Number(e.target.value))}
+            >
+                {Object.entries(analysisTypes).map(([typeId, typeName]) => (
+                    <option key={typeId} value={typeId}>
+                        {typeName}
+                    </option>
+                ))}
+            </select>
+            <br />
+
+            {error ? (
+                <p>{error}</p>
+            ) : analyses.length > 0 ? (
                 <table className="table bg-white">
                     <thead>
                         <tr>
                             <th>Назва лабораторії</th>
                             <th>Тип аналізу</th>
-                            <th>Дата аналізу</th>
+                            <th>
+                                Дата аналізу{' '}
+                                <button onClick={handleSortByDate}>
+                                    {sortByDateDescending ? '▲' : '▼'}
+                                </button>
+                            </th>
                             <th></th>
                         </tr>
                     </thead>
@@ -50,7 +92,7 @@ function PatientAnalyses() {
                             <tr key={analysis.id}>
                                 <td>{analysis.laboratoryName}</td>
                                 <td>{analysisTypes[analysis.analysisType]}</td>
-                                <td>{analysis.analysisDate}</td>
+                                <td>{formatDate(analysis.analysisDate)}</td>
                                 <td>
                                     <input
                                         type="radio"
@@ -66,6 +108,7 @@ function PatientAnalyses() {
             ) : (
                 <p>У пацієнта немає аналізів.</p>
             )}
+            <hr />
         </div>
     );
 }
