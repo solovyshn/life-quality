@@ -50,8 +50,8 @@ function PatientsTable() {
                             <td>{patient.email}</td>
                             <td>{patient.phoneNumber}</td>
                             <td>
-                                <Link to={`/patient/${patient.id}/analyses`}>
-                                    <img className="arrow-right" src={ArrowRight} alt='arrow'/>
+                                <Link to={`/patient/${userID}/${patient.id}/analyses`}>
+                                    <img className="arrow-right" src={ArrowRight} alt='arrow' />
                                 </Link>
                             </td>
                         </tr>
