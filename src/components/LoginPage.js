@@ -18,10 +18,11 @@ export default function LoginPage() {
         e.preventDefault();
         try {
             const response = await axios.get(`https://localhost:44375/Autorization/login?Login=${login}&Password=${password}`);
-            const { id, status } = response.data;
+            const { id, status, name, surname } = response.data;
 
+            const fullName = name + ' ' + surname
             // Store the user type and id in the state
-            setUser(id, status);
+            setUser(id, status, login, fullName);
 
             // Check the user type and navigate accordingly
             if (userType === 'doctor') {
@@ -50,7 +51,7 @@ export default function LoginPage() {
                     <h3>Якість життя</h3>
                     <br />
                     <div className="login-form-container">
-                        <form onSubmit={handleSubmit}>
+                        <form>
                             {errorMessage && <p className="error-message" style={{ color: 'red' }}>{errorMessage}</p>}
                             <div className="mb-3">
                                 <label htmlFor="login" className="form-label">Логін</label>
@@ -61,9 +62,9 @@ export default function LoginPage() {
                                 <label htmlFor="password" className="form-label">Пароль</label>
                                 <input type="password" className="form-control" id="password" placeholder="Введіть ваш пароль" value={password} onChange={(e) => setPassword(e.target.value)} />
                             </div>
-
-                            <button type="submit" className="custom-btn">Увійти</button>
                         </form>
+                        <button className="custom-btn" onClick={handleSubmit}>Увійти</button>
+                        <button className="custom-btn">Зареєструватись</button>
                     </div>
                 </div>
                 <div className="col-md-6">

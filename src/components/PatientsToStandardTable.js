@@ -6,20 +6,18 @@ import UserContext from '../userContext'
 import { useNavigate } from 'react-router-dom';
 
 
-function PatientsTable() {
+function PatientsToStandardTable() {
     const [patients, setPatients] = useState([]);
     const { userID } = useContext(UserContext);
-    const navigate = useNavigate();
+    const navigate = useNavigate(); // Get the navigate function from react-router-dom
 
     const handleNavigation = () => {
         navigate(`/mainPageDoctor/${userID}`);
     }
-
     const handleNavigationToAnalyses = async (e, patientId) => {
         e.preventDefault();
-        navigate(`/patient/${userID}/${patientId}/analysesInfo`);
+        navigate(`/patient/${userID}/${patientId}/analyses`);
     }
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -36,7 +34,7 @@ function PatientsTable() {
     return (
         <div className="container mt-4">
             <h2>Пацієнти</h2>
-            <p>Для перегляду аналізу, натисність на потрібного пацієнта.</p>
+            <p>Для вибору аналізу для зведення, натисніть на потрібного пацієнта.</p>
             <hr />
             <table className="table bg-white">
                 <thead>
@@ -51,7 +49,8 @@ function PatientsTable() {
                 </thead>
                 <tbody>
                     {patients.map((patient) => (
-                        <tr key={patient.id} className="clickable-row"  onClick={(e) => handleNavigationToAnalyses(e, patient.id)}>
+                        <tr key={patient.id} className="clickable-row" onClick={(e) => handleNavigationToAnalyses(e, patient.id)}>
+                            {/* Wrap the row content with a Link to the patient's analyses page */}
                             <td> <img src={avatar} alt="avatar" /></td>
                             <td>{patient.name}</td>
                             <td>{patient.surname}</td>
@@ -66,4 +65,4 @@ function PatientsTable() {
     );
 }
 
-export default PatientsTable;
+export default PatientsToStandardTable;

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import UserContext from '../userContext'
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import UserContext from '../userContext';
-import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const analysisTypes = {
@@ -11,40 +11,39 @@ const analysisTypes = {
     3: 'Аналіз калу',
 };
 
-function PatientOwnAnalyses() {
+function PatientAnalysesInfo() {
+    const navigate = useNavigate();
     const { userID } = useContext(UserContext);
+    const { doctor_id, id } = useParams();
+    const [patient, setPatient] = useState({});
     const [analyses, setAnalyses] = useState([]);
-    const navigate = useNavigate()
     const [selectedAnalysisType, setSelectedAnalysisType] = useState(0);
     const [sortByDateDescending, setSortByDateDescending] = useState(true); // Added state for sorting
     const [error, setError] = useState(null);
 
     const handleNavigation = () => {
-        navigate(`/mainPagePatient/${userID}`);
-    }
-
-    const handleNavigationToDetails = async (e, analysisId) => {
-        e.preventDefault();
-        navigate(`/myanalyses/details/${analysisId}`);
+        navigate(`/mainPageDoctor/${userID}`);
     }
 
     useEffect(() => {
-        const fetchAnalyses = async () => {
+        const fetchPatient = async () => {
             try {
-                const response = await axios.get(`https://localhost:44375/Analysis?UserId=${userID}&AnalysisType=0&SortByDateDescending=true`);
-                setAnalyses(response.data);
+                const response = await axios.get(`https://localhost:44375/Patient?DoctorId=${doctor_id}&SearchQuery=${id}`);
+                const patientData = response.data[0]; // Assuming there is only one patient in the response
+                setPatient(patientData);
             } catch (error) {
-                console.error('Error fetching analyses:', error);
+                console.error('Error fetching patient:', error);
+                setPatient({});
             }
         };
 
-        fetchAnalyses();
-    }, [userID]);
+        fetchPatient();
+    }, [doctor_id, id]);
 
     useEffect(() => {
         const fetchAnalyses = async () => {
             try {
-                const response = await axios.get(`https://localhost:44375/Analysis?UserId=${userID}&AnalysisType=${selectedAnalysisType}&SortByDateDescending=${sortByDateDescending}`);
+                const response = await axios.get(`https://localhost:44375/Analysis?UserId=${id}&AnalysisType=${selectedAnalysisType}&SortByDateDescending=${sortByDateDescending}`);
                 setAnalyses(response.data);
                 setError(null);
             } catch (error) {
@@ -54,25 +53,33 @@ function PatientOwnAnalyses() {
             }
         };
         fetchAnalyses();
-    }, [userID, selectedAnalysisType, sortByDateDescending]);
+    }, [id, selectedAnalysisType, sortByDateDescending]);
 
-    const formatDate = (analysisDate) =>{
+    const formatDate = (analysisDate) => {
         const dateObject = new Date(analysisDate);
-
-        // Format the Date object
         const formattedDate = new Intl.DateTimeFormat('en-GB', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
         }).format(dateObject);
-         
+
         return formattedDate;
     }
+
+    const handleNavigationToDetails = async (e, analysisId) => {
+        e.preventDefault();
+        navigate(`/patient/${doctor_id}/${id}/analysisDetails?analysisId=${analysisId}`);
+    }
+
+
+    const handleSortByDate = () => {
+        setSortByDateDescending((prevSort) => !prevSort);
+    };
 
     return (
         <div>
             <br />
-            <h2>Ваші аналізи</h2>
+            <h2>Аналізи пацієнта: {patient.name} {patient.surname}  </h2>
             <p>Для перегляду деталей, натисніть на відповідний аналіз.</p>
             <hr />
             <select
@@ -86,14 +93,22 @@ function PatientOwnAnalyses() {
                     </option>
                 ))}
             </select>
-            <hr />
-            {analyses.length > 0 ? (
+            <br />
+            {error ? (
+                <p>{error}</p>
+            ) : analyses.length > 0 ? (
                 <table className="table bg-white">
                     <thead>
                         <tr>
                             <th>Назва лабораторії</th>
                             <th>Тип аналізу</th>
-                            <th>Дата аналізу</th>
+                            <th>
+                                Дата аналізу{' '}
+                                <button onClick={handleSortByDate}>
+                                    {sortByDateDescending ? '▲' : '▼'}
+                                </button>
+                            </th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -107,12 +122,12 @@ function PatientOwnAnalyses() {
                     </tbody>
                 </table>
             ) : (
-                <p>У Вас немає аналізів.</p>
+                <p>У пацієнта немає аналізів.</p>
             )}
-            <button className="custom-btn" onClick={handleNavigation}>Повернутись до кабінету</button>
-            <button className="custom-btn">Додати аналіз</button>
+            <hr />
+            <button className="custom-btn" onClick={handleNavigation}>Повернутись</button>
         </div>
     );
 }
 
-export default PatientOwnAnalyses;
+export default PatientAnalysesInfo;

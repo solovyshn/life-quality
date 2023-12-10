@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import UserContext from '../userContext';
 
 const Height = {
     1: '0-50 см',
@@ -42,7 +44,7 @@ function StandartizedAnalyses() {
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const { doctor_id, id } = useParams();
-
+    const navigate = useNavigate();
     const [patient, setPatient] = useState({});
     const analysisId = params.get('analysisId');
     const gender = params.get('gender');
@@ -50,6 +52,12 @@ function StandartizedAnalyses() {
     const ageRange = params.get('ageRange');
     const height = params.get('height');
     const [analysisProperties, setAnalysisProperties] = useState([]);
+    const { userID } = useContext(UserContext);
+
+
+    const handleNavigation = () => {
+        navigate(`/mainPageDoctor/${userID}`);
+    }
 
     useEffect(() => {
         const fetchPatient = async () => {
@@ -80,6 +88,7 @@ function StandartizedAnalyses() {
 
         fetchAnalysisData();
     }, [analysisId, gender, region, ageRange, height]);
+
     return (
         <div>
             <br />
@@ -129,6 +138,17 @@ function StandartizedAnalyses() {
                     ))}
                 </tbody>
             </table>
+            <div className="row">
+                <div className="col-md-4">
+                    <button className="custom-btn w-100" onClick={handleNavigation}>Повернутись у мій кабінет</button>
+                </div>
+                <div className="col-md-4">
+                    <button className="custom-btn w-100">Завантажити результат</button>
+                </div>
+                <div className="col-md-4">
+                    <button className="custom-btn w-100">Переглянути статистику пацієнта</button>
+                </div>
+            </div>
         </div>
     );
 }

@@ -49,6 +49,10 @@ body {
     background-color: #005f6e;
 }
 
+.clickable-row {
+    cursor: pointer;
+}
+
 .group-main {
     align-self: center;
     height: 50px;
