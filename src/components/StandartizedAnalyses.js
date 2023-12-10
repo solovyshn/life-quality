@@ -143,7 +143,7 @@ function StandartizedAnalyses() {
                     <button className="custom-btn w-100" onClick={handleNavigation}>Повернутись у мій кабінет</button>
                 </div>
                 <div className="col-md-4">
-                    <button className="custom-btn w-100">Завантажити результат</button>
+                    <button className="custom-btn w-100">Зберегти</button>
                 </div>
                 <div className="col-md-4">
                     <button className="custom-btn w-100">Переглянути статистику пацієнта</button>
