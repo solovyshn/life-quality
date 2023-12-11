@@ -105,9 +105,11 @@ export default function MainPageDoctor() {
             <Row>
               <Col>
                 <button className="custom-btn w-100" onClick={handleNavigation}>Список моїх аналізів</button>
+                <button className="custom-btn w-100">Мої рецепти</button>
               </Col>
               <Col>
                 <button className="custom-btn w-100" style={buttonStyle} onClick={handleShowInfoClick}>{isDoctorInfoVisible ? "Сховати інформацію про лікаря" : "Переглянути інформацію про лікаря"}</button>
+                <button className="custom-btn w-100">Моя історія прийомів</button>
               </Col>
             </Row>
             <Row>
